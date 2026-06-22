@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.
         UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.
         SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -16,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter
@@ -40,7 +43,7 @@ public class JwtAuthenticationFilter
         String jwt;
         jwt = null;
         String username = null;
-
+        String role = null;
         // Check Bearer token
         if (authHeader != null
                 && authHeader.startsWith("Bearer ")) {
@@ -49,6 +52,7 @@ public class JwtAuthenticationFilter
 
             if (jwtUtil.validateToken(jwt)) {
                 username = jwtUtil.extractUsername(jwt);
+                role = jwtUtil.extractRole(jwt);
             }
         }
 
@@ -56,11 +60,12 @@ public class JwtAuthenticationFilter
         if (username != null
                 && SecurityContextHolder.getContext()
                 .getAuthentication() == null) {
-
+            List<GrantedAuthority> authorities =
+                    List.of(new SimpleGrantedAuthority("ROLE_" + role));
             User user =
                     new User(username,
                             "",
-                            Collections.emptyList());
+                            authorities);
 
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(
