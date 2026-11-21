@@ -46,6 +46,7 @@ that show up in any capital markets or payments RFP.
 * Java 17
 * Spring Boot
 * Spring Data JPA
+* Spring Security
 * MySQL
 * Maven
 * Lombok
@@ -54,12 +55,18 @@ that show up in any capital markets or payments RFP.
 
 ## 🔐 Key Concepts Implemented
 
+* RESTful APIs for banking transactions and account management
 * @Transactional for atomic operations
 * Optimistic Locking using @Version
 * Layered Architecture (Controller → Service → Repository)
 * DTO pattern for request/response
 * Exception handling using @ControllerAdvice
 * JWT Authentication
+* Swagger/OpenAPI documentation
+* Unit tests using JUnit and Mockito
+* Basic integration/smoke-level testing
+* GitHub Actions CI workflow for automated Maven build and test execution on pushes to main and pull requests targeting main
+
   
 ---
 
@@ -121,18 +128,28 @@ POST /accounts/transfer
 
 ## ▶️ How to Run
 
-1. Clone the repo
-2. Configure MySQL in `application.yml`
-3. Run the application
-4. Access Swagger UI
+1. Clone the repository
+2. Create the MySQL database
+3. Configure application properties
+   Open src/main/resources/application.yml (or application.yaml) and configure your MySQL datasource credentials and JWT secret under the jwt.secret property. Use a secure secret key and do not commit actual credentials or secrets to the repository
+4. Run the application
+   From the project root directory, execute:
+     ./mvnw spring-boot:run
+   On Windows, use:
+     mvnw.cmd spring-boot:run
+5. Access Swagger UI
+   Open your browser and navigate to:
+   http://localhost:8080/swagger-ui.html
 
 ---
 
 ## 📌 Future Improvements
 
-* Kafka integration for async processing
-* Docker support
-* Unit & Integration Tests
+* Performance: Redis caching, API rate limiting and database query optimization.
+* Security & Reliability: Idempotency, enhanced API security and resilience patterns (Circuit Breaker, Retry).
+* Architecture: Kafka-based asynchronous processing.
+* DevOps: Docker containerization and automated deployment using GitHub Actions.
+* Monitoring: Application logging and metrics using Prometheus and Grafana.
 
 ---
 
